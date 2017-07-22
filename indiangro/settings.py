@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'compressor',
     'widget_tweaks',
+    'paypal',
 ] + get_core_apps()
 
 SITE_ID = 1
@@ -156,3 +157,4 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = location('media')
 
 OSCAR_DEFAULT_CURRENCY = 'USD'
+OSCAR_SHOP_NAME = 'IndianGrocery.us'
