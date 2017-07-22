@@ -30,7 +30,7 @@ SECRET_KEY = 'o_9tw3$p4bwl$pu^q1msjdxto)^q87-nya734=d#gz#nh-oo!('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['63.142.254.51']
 
 
 # Application definition
@@ -147,5 +147,12 @@ HAYSTACK_CONNECTIONS = {
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
+location = lambda x: os.path.join(
+os.path.dirname(os.path.realpath(__file__)), x)
+
 STATIC_URL = '/static/'
 STATIC_ROOT = '/staticfiles/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = location('media')
+
+OSCAR_DEFAULT_CURRENCY = 'USD'
