@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.flatpages',
     'django.contrib.sites',
-  
     'compressor',
     'widget_tweaks',
 ] + get_core_apps()
