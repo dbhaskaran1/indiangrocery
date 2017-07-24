@@ -152,9 +152,12 @@ location = lambda x: os.path.join(
 os.path.dirname(os.path.realpath(__file__)), x)
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/staticfiles/'
-MEDIA_URL = '/media/'
+STATIC_ROOT = './staticfiles/'
+MEDIA_URL = './media/'
 MEDIA_ROOT = location('media')
 
 OSCAR_DEFAULT_CURRENCY = 'USD'
 OSCAR_SHOP_NAME = 'IndianGrocery.us'
+OSCAR_SHOP_TAGLINE = 'For all your shopping needs.'
+
+PAYPAL_CURRENCY='USD'
