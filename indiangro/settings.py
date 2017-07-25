@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'compressor',
     'widget_tweaks',
-    'paypal',
+    'indiangro',
 ] + get_core_apps()
 
 SITE_ID = 1
