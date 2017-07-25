@@ -19,6 +19,8 @@ from django.contrib import admin
 from oscar.app import application
 from django.conf import settings
 from django.conf.urls.static import static
+from paypal.express.dashboard.app import application as paypal_application
+
 
 urlpatterns = [
     url(r'^i18n/', include('django.conf.urls.i18n')),
@@ -26,6 +28,10 @@ urlpatterns = [
     # The Django admin is not officially supported; expect breakage.
     # Nonetheless, it's often useful for debugging.
     url(r'^admin/', include(admin.site.urls)),
+
+    # paypal
+    url(r'^checkout/paypal/', include('paypal.express.urls')),
+    url(r'^dashboard/paypal/express/', include(paypal_application.urls)),
 
     url(r'', include(application.urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
