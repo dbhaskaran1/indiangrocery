@@ -10,11 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
-# Django oscar related imports
-from oscar.defaults import *
-from oscar import OSCAR_MAIN_TEMPLATE_DIR
-from oscar import get_core_apps
-
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -25,12 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'o_9tw3$p4bwl$pu^q1msjdxto)^q87-nya734=d#gz#nh-oo!('
+SECRET_KEY = 'w0&c9bxhs5i2hll%2&7q_2m_lx3ff%2e34km*w@fcf4$dp-c-q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['63.142.254.51','localhost']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -42,16 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.flatpages',
-    'django.contrib.sites',
-    'compressor',
-    'widget_tweaks',
-    'indiangro',
-] + get_core_apps()
+]
 
-SITE_ID = 1
-
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -59,8 +47,6 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'oscar.apps.basket.middleware.BasketMiddleware',
-    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 ]
 
 ROOT_URLCONF = 'indiangro.urls'
@@ -68,10 +54,7 @@ ROOT_URLCONF = 'indiangro.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-          os.path.join(BASE_DIR, 'templates'),
-          OSCAR_MAIN_TEMPLATE_DIR
-        ],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -79,12 +62,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-              
-                'oscar.apps.search.context_processors.search_form',
-                'oscar.apps.promotions.context_processors.promotions',
-                'oscar.apps.checkout.context_processors.checkout',
-                'oscar.apps.customer.notifications.context_processors.notifications',
-                'oscar.core.context_processors.metadata',
             ],
         },
     },
@@ -102,6 +79,7 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -121,10 +99,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTHENTICATION_BACKENDS = (
-    'oscar.apps.customer.auth_backends.EmailBackend',
-    'django.contrib.auth.backends.ModelBackend',
-)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
@@ -139,25 +113,87 @@ USE_L10N = True
 
 USE_TZ = True
 
-HAYSTACK_CONNECTIONS = {
-    'default': {
-        'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
-    },
-}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
-location = lambda x: os.path.join(
-os.path.dirname(os.path.realpath(__file__)), x)
-
 STATIC_URL = '/static/'
-STATIC_ROOT = './staticfiles/'
-MEDIA_URL = './media/'
-MEDIA_ROOT = location('media')
 
-OSCAR_DEFAULT_CURRENCY = 'USD'
-OSCAR_SHOP_NAME = 'IndianGrocery.us'
-OSCAR_SHOP_TAGLINE = 'For all your shopping needs.'
+#####################################################
+# oscardemo modifications for 1.initial-setup       #
+#####################################################
 
-PAYPAL_CURRENCY='USD'
+# standard django statis and media settings
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# this includes all the oscar default settins
+from oscar.defaults import *
+
+from oscar import OSCAR_MAIN_TEMPLATE_DIR
+from oscar import get_core_apps
+
+TEMPLATES[0]['DIRS'] = [
+    os.path.join(BASE_DIR, 'templates'),
+    # this "hack" allows to access the oscar templates using standard path e.g. /home.html
+    # but also prefixed with /oscar/ e.g. /oscar/home.html
+    # this allows to extend oscar templates, we will see an example of this later
+    OSCAR_MAIN_TEMPLATE_DIR
+]
+
+TEMPLATES[0]['OPTIONS']['context_processors'] += [
+    'oscar.apps.search.context_processors.search_form',
+    'oscar.apps.promotions.context_processors.promotions',
+    'oscar.apps.checkout.context_processors.checkout',
+    'oscar.apps.customer.notifications.context_processors.notifications',
+    'oscar.core.context_processors.metadata',
+]
+
+INSTALLED_APPS += [
+    'django.contrib.sites',
+    'django.contrib.flatpages',
+    # django-compressor is used for compiling static assets
+    'compressor',
+    # django-widget-tweaks allows some nice customization of html forms rendring from templates
+    # it's used in the default oscar temlpates
+    'widget_tweaks',
+    # django oscar is split into many apps
+] + get_core_apps()
+
+SITE_ID = 1
+
+MIDDLEWARE += [
+    'oscar.apps.basket.middleware.BasketMiddleware',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+]
+
+AUTHENTICATION_BACKENDS = (
+    'oscar.apps.customer.auth_backends.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+# haystack is a search engine module for django
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        # django-oscar only supports SimpleEngine which has no special dependencies or SolrEngine
+        'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
+    },
+}
+
+# django oscar recommends using ATOMIC_REQUESTS
+DATABASES['default']['ATOMIC_REQUESTS'] = True
+
+# oscar has status for entire order, or per line
+# the status names and pipeline is fully customizable here
+OSCAR_INITIAL_ORDER_STATUS = 'Pending'
+OSCAR_INITIAL_LINE_STATUS = 'Pending'
+OSCAR_ORDER_STATUS_PIPELINE = {
+    'Pending': ('Being processed', 'Cancelled',),
+    'Being processed': ('Processed', 'Cancelled',),
+    'Cancelled': (),
+}
+
+OSCAR_DEFAULT_CURRENCY = "USD"
