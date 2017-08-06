@@ -8,3 +8,7 @@ PAYPAL_API_SIGNATURE = 'AFcWxV21C7fd0v3bYYYRCpSSRl31AcHV4KiPTORgwMrl98rYKXeUCnfC
 
 OSCAR_SHOP_NAME = 'IndianGrocery.us'
 OSCAR_SHOP_TAGLINE = 'Shopping, simplified.'
+
+from oscar import get_core_apps
+INSTALLED_APPS = INSTALLED_APPS + get_core_apps(
+    ['indiangro.promotions'])
