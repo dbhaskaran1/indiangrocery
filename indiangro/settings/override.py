@@ -10,5 +10,8 @@ OSCAR_SHOP_NAME = 'IndianGrocery.us'
 OSCAR_SHOP_TAGLINE = 'Shopping, simplified.'
 
 from oscar import get_core_apps
-INSTALLED_APPS = INSTALLED_APPS + get_core_apps(
-    ['indiangro.promotions'])
+INSTALLED_APPS = INSTALLED_APPS + get_core_apps( 
+        [
+            'indiangro.promotions',
+            'indiangro.partner',
+        ])
